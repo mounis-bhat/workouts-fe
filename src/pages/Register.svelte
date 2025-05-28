@@ -1,5 +1,8 @@
 <script lang="ts">
   import { push } from 'svelte-spa-router';
+  import { fly, fade, scale } from 'svelte/transition';
+  import { elasticOut, cubicOut } from 'svelte/easing';
+  import { onMount } from 'svelte';
   
   let username = '';
   let email = '';
@@ -8,6 +11,13 @@
   let loading = false;
   let error = '';
   let success = false;
+  let formVisible = false;
+
+  onMount(() => {
+    setTimeout(() => {
+      formVisible = true;
+    }, 100);
+  });
 
   async function handleRegister() {
     if (!username || !email || !password || !confirmPassword) {
@@ -63,21 +73,21 @@
 </script>
 
 <div class="register-container">
-  <div class="register-card glass-container">
-    <h1>Workout Tracker</h1>
-    <h2>Create your account</h2>
+  <div class="register-card glass-container" in:scale={{ duration: 600, easing: elasticOut }}>
+    <h1 in:fly={{ y: -20, duration: 600, delay: 200, easing: cubicOut }}>Workout Tracker</h1>
+    <h2 in:fly={{ y: -20, duration: 600, delay: 300, easing: cubicOut }}>Create your account</h2>
     
     {#if error}
-      <div class="error">{error}</div>
+      <div class="error" in:fly={{ x: -30, duration: 400 }}>{error}</div>
     {/if}
 
     {#if success}
-      <div class="success">
+      <div class="success" in:scale={{ duration: 400, easing: elasticOut }}>
         Account created successfully! Redirecting to login...
       </div>
     {/if}
 
-    <form on:submit|preventDefault={handleRegister}>
+    <form on:submit|preventDefault={handleRegister} in:fade={{ duration: 600, delay: 400 }}>
       <div class="form-group">
         <label for="username">Username</label>
         <input

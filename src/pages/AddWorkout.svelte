@@ -2,6 +2,8 @@
   import { onMount } from 'svelte';
   import { push } from 'svelte-spa-router';
   import { clearAuth } from '../stores/auth';
+  import { fly, fade, scale } from 'svelte/transition';
+  import { elasticOut, cubicOut } from 'svelte/easing';
   import type { WorkoutEntryForm } from '../types';
   
   let title = '';
@@ -11,6 +13,7 @@
   let entries: WorkoutEntryForm[] = [];
   let loading = false;
   let error = '';
+  let formVisible = false;
 
   onMount(() => {
     const token = localStorage.getItem('token');
@@ -21,6 +24,11 @@
     
     // Start with one empty entry
     addEntry();
+    
+    // Trigger form animation
+    setTimeout(() => {
+      formVisible = true;
+    }, 100);
   });
 
   function addEntry() {

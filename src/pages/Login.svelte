@@ -1,11 +1,22 @@
 <script lang="ts">
   import { push } from 'svelte-spa-router';
   import { login } from '../stores/auth';
+  import { fly, fade, scale } from 'svelte/transition';
+  import { elasticOut, cubicOut } from 'svelte/easing';
   
   let username = '';
   let password = '';
   let loading = false;
   let error = '';
+  let formVisible = false;
+
+  // Trigger form animation on mount
+  import { onMount } from 'svelte';
+  onMount(() => {
+    setTimeout(() => {
+      formVisible = true;
+    }, 100);
+  });
 
   async function handleLogin() {
     if (!username || !password) {
@@ -33,15 +44,15 @@
 </script>
 
 <div class="login-container">
-  <div class="login-card glass-container">
-    <h1>Workout Tracker</h1>
-    <h2>Welcome back</h2>
+  <div class="login-card glass-container" in:scale={{ duration: 600, easing: elasticOut }}>
+    <h1 in:fly={{ y: -20, duration: 600, delay: 200, easing: cubicOut }}>Workout Tracker</h1>
+    <h2 in:fly={{ y: -20, duration: 600, delay: 300, easing: cubicOut }}>Welcome back</h2>
     
     {#if error}
-      <div class="error">{error}</div>
+      <div class="error" in:fly={{ x: -30, duration: 400 }}>{error}</div>
     {/if}
 
-    <form on:submit|preventDefault={handleLogin}>
+    <form on:submit|preventDefault={handleLogin} in:fade={{ duration: 600, delay: 400 }}>
       <div class="form-group">
         <label for="username">Username</label>
         <input
@@ -50,6 +61,7 @@
           bind:value={username}
           placeholder="Enter your username"
           disabled={loading}
+          class="hover-glow"
         />
       </div>
 
@@ -61,10 +73,11 @@
           bind:value={password}
           placeholder="Enter your password"
           disabled={loading}
+          class="hover-glow"
         />
       </div>
 
-      <button type="submit" disabled={loading} class="login-btn btn btn-primary">
+      <button type="submit" disabled={loading} class="login-btn btn btn-primary hover-glow ripple">
         {#if loading}
           <span class="loading"></span>
           Logging in...
@@ -74,9 +87,9 @@
       </button>
     </form>
 
-    <p class="register-link">
+    <p class="register-link" in:fade={{ duration: 600, delay: 600 }}>
       Don't have an account? 
-      <button on:click={goToRegister} class="link-btn">Create account</button>
+      <button on:click={goToRegister} class="link-btn hover-scale">Create account</button>
     </p>
   </div>
 </div>

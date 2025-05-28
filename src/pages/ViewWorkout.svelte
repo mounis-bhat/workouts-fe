@@ -2,6 +2,8 @@
   import { onMount } from 'svelte';
   import { push } from 'svelte-spa-router';
   import { clearAuth } from '../stores/auth';
+  import { fly, fade, scale } from 'svelte/transition';
+  import { elasticOut, cubicOut } from 'svelte/easing';
   import type { Workout, WorkoutEntry } from '../types';
 
   export let params: { id: string };
@@ -9,6 +11,7 @@
   let workout: Workout | null = null;
   let loading = true;
   let error = '';
+  let contentVisible = false;
 
   onMount(async () => {
     const token = localStorage.getItem('token');
@@ -18,6 +21,13 @@
     }
 
     await loadWorkout();
+    
+    // Trigger content animation after loading
+    if (workout) {
+      setTimeout(() => {
+        contentVisible = true;
+      }, 100);
+    }
   });
 
   async function loadWorkout() {

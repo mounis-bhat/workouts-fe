@@ -2,12 +2,15 @@
   import { onMount } from 'svelte';
   import { push } from 'svelte-spa-router';
   import { clearAuth } from '../stores/auth';
+  import { fly, fade, scale } from 'svelte/transition';
+  import { elasticOut, cubicOut } from 'svelte/easing';
   import type { Workout, User, WorkoutsResponse } from '../types';
   
   let workouts: Workout[] = [];
   let loading = true;
   let error = '';
   let user: User | null = null;
+  let animateCards = false;
 
   onMount(async () => {
     const token = localStorage.getItem('token');
@@ -18,6 +21,11 @@
 
     await loadUserData();
     await loadWorkouts();
+    
+    // Trigger card animations after loading
+    setTimeout(() => {
+      animateCards = true;
+    }, 100);
   });
 
   async function loadUserData() {
@@ -80,7 +88,7 @@
 </script>
 
 <div class="dashboard">
-  <header class="header glass-container">
+  <header class="header glass-container" in:fly={{ y: -30, duration: 600, easing: cubicOut }}>
     <div class="header-content">
       <h1>🏋️ Workout Tracker</h1>
       <div class="header-actions">
@@ -91,9 +99,9 @@
   </header>
 
   <main class="main-content">
-    <div class="dashboard-header">
+    <div class="dashboard-header" in:fly={{ y: 30, duration: 600, delay: 200, easing: cubicOut }}>
       <h2>Your Workouts</h2>
-      <button on:click={goToAddWorkout} class="add-workout-btn btn btn-primary">
+      <button on:click={goToAddWorkout} class="add-workout-btn btn btn-primary hover-glow">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="12" y1="5" x2="12" y2="19"></line>
           <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -103,18 +111,18 @@
     </div>
 
     {#if loading}
-      <div class="simple-loader">
-        <div class="loader-spinner"></div>
+      <div class="simple-loader" in:fade={{ duration: 300 }}>
+        <div class="loader-spinner animate-pulse"></div>
         <div class="loader-text">Loading your workouts...</div>
       </div>
     {:else if error}
-      <div class="error">{error}</div>
+      <div class="error" in:fly={{ x: -30, duration: 400 }}>{error}</div>
     {:else if workouts.length === 0}
-      <div class="empty-state glass-container">
-        <div class="empty-icon">💪</div>
+      <div class="empty-state glass-container" in:scale={{ duration: 600, delay: 300, easing: elasticOut }}>
+        <div class="empty-icon animate-float">💪</div>
         <h3>No workouts yet!</h3>
         <p>Start tracking your fitness journey by adding your first workout.</p>
-        <button on:click={goToAddWorkout} class="add-first-workout-btn btn btn-primary">
+        <button on:click={goToAddWorkout} class="add-first-workout-btn btn btn-primary hover-glow">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="12" y1="5" x2="12" y2="19"></line>
             <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -124,12 +132,14 @@
       </div>
     {:else}
       <div class="workouts-grid">
-        {#each workouts as workout}
+        {#each workouts as workout, i}
           <button 
-            class="workout-card glass-container" 
+            class="workout-card glass-container hover-lift" 
             on:click={() => viewWorkout(workout.id)}
             on:keydown={(e) => e.key === 'Enter' && viewWorkout(workout.id)}
             type="button"
+            in:fly={{ y: 50, duration: 600, delay: i * 100, easing: cubicOut }}
+            out:scale={{ duration: 300, easing: cubicOut }}
           >
             <div class="workout-header">
               <h3>{workout.title}</h3>
