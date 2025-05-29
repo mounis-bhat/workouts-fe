@@ -1,4 +1,4 @@
-name: Deploy Workouts Web
+name: Deploy Svelte SPA
 
 on:
   push:
@@ -10,14 +10,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Setup Node.js 22
         uses: actions/setup-node@v3
         with:
           node-version: '22'
-          cache: 'pnpm'
 
       - name: Install pnpm
         run: npm install -g pnpm
@@ -28,7 +27,7 @@ jobs:
       - name: Build app
         run: pnpm run build
 
-      - name: Deploy to /var/www/workouts-web (not /dist)
+      - name: Deploy to VPS
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.HOST }}
@@ -38,3 +37,4 @@ jobs:
           source: "dist/*"
           target: "/var/www/workouts-web"
           strip_components: 1
+
