@@ -1,47 +1,178 @@
-# Svelte + TS + Vite
+# Workouts Frontend
 
-This template should help get you started developing with Svelte and TypeScript in Vite.
+A modern, responsive workout tracking application built with Svelte, TypeScript, and Vite. This frontend application provides a beautiful and intuitive interface for managing personal workout routines, tracking exercise progress, and viewing workout statistics.
 
-## Recommended IDE Setup
+## 🚀 Features
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+- **User Authentication**: Secure login and registration system
+- **Workout Management**: Create, view, edit, and delete workout routines
+- **Exercise Tracking**: Add detailed exercise entries with sets, reps, duration, weight, and notes
+- **Progress Analytics**: View workout statistics, streaks, and progress over time
+- **Responsive Design**: Beautiful UI that works on desktop and mobile devices
+- **Smooth Animations**: Enhanced user experience with custom transitions and animations
+- **Real-time Updates**: Live data synchronization with the backend API
 
-## Need an official Svelte framework?
+## 🛠️ Tech Stack
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+- **Frontend Framework**: Svelte 5
+- **Language**: TypeScript
+- **Build Tool**: Vite
+- **Routing**: svelte-spa-router
+- **State Management**: Svelte stores
+- **Styling**: CSS with custom animations
+- **Package Manager**: pnpm
 
-## Technical considerations
+## 📋 Prerequisites
 
-**Why use this over SvelteKit?**
+Before running this application, make sure you have:
 
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
+- Node.js (version 18 or higher)
+- pnpm package manager
+- Access to the workouts backend API (running on `https://workouts-api.mounis.net`)
 
-This template contains as little as possible to get started with Vite + TypeScript + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
+## 🚀 Getting Started
 
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
+### Installation
 
-**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd workouts-fe
+   ```
 
-Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
+2. **Install dependencies**
+   ```bash
+   pnpm install
+   ```
 
-**Why include `.vscode/extensions.json`?**
+3. **Start the development server**
+   ```bash
+   pnpm dev
+   ```
 
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
+   The application will be available at `http://localhost:3000`
 
-**Why enable `allowJs` in the TS template?**
+### Available Scripts
 
-While `allowJs: false` would indeed prevent the use of `.js` files in the project, it does not prevent the use of JavaScript syntax in `.svelte` files. In addition, it would force `checkJs: false`, bringing the worst of both worlds: not being able to guarantee the entire codebase is TypeScript, and also having worse typechecking for the existing JavaScript. In addition, there are valid use cases in which a mixed codebase may be relevant.
+- `pnpm dev` - Start development server on port 3000
+- `pnpm build` - Build the application for production
+- `pnpm preview` - Preview the production build
+- `pnpm check` - Run TypeScript and Svelte checks
 
-**Why is HMR not preserving my local component state?**
+## 📁 Project Structure
 
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/rixo/svelte-hmr#svelte-hmr).
-
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
-
-```ts
-// store.ts
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
 ```
+src/
+├── pages/                 # Application pages/routes
+│   ├── Login.svelte      # User authentication page
+│   ├── Register.svelte   # User registration page
+│   ├── Dashboard.svelte  # Main dashboard with workout list
+│   ├── AddWorkout.svelte # Create new workout page
+│   └── ViewWorkout.svelte # View/edit specific workout
+├── stores/               # Svelte stores for state management
+│   └── auth.ts          # Authentication state and functions
+├── animation-utils.ts    # Animation utility functions
+├── animations.css        # Custom CSS animations
+├── app.css              # Global application styles
+├── types.ts             # TypeScript type definitions
+├── App.svelte           # Root application component
+└── main.ts              # Application entry point
+```
+
+## 🔐 Authentication
+
+The application uses token-based authentication:
+
+- Login with username and password
+- Tokens are stored in localStorage
+- Automatic token validation on app initialization
+- Secure logout with token cleanup
+
+## 📊 Features Overview
+
+### Dashboard
+- **Workout Statistics**: Total workouts, weekly/monthly counts, streaks
+- **Progress Tracking**: Duration, calories burned, favorite exercises
+- **Workout Calendar**: Visual representation of workout frequency
+- **Recent Workouts**: Quick access to recent workout sessions
+
+### Workout Management
+- **Create Workouts**: Add new workout routines with title and description
+- **Exercise Entries**: Add multiple exercises with detailed information:
+  - Exercise name
+  - Sets and reps
+  - Duration (for time-based exercises)
+  - Weight (for resistance exercises)
+  - Personal notes
+- **Workout Editing**: Modify existing workouts and exercises
+- **Workout Deletion**: Remove workouts with confirmation
+
+### User Experience
+- **Smooth Transitions**: Custom animations between pages and components
+- **Loading States**: Visual feedback during API operations
+- **Error Handling**: User-friendly error messages
+- **Responsive Design**: Optimized for all screen sizes
+
+## 🎨 Styling and Animations
+
+The application features:
+- Modern, clean design with consistent color scheme
+- Custom CSS animations for enhanced interactivity
+- Smooth page transitions using Svelte's built-in transition system
+- Responsive grid layouts for optimal viewing on any device
+
+## 🔌 API Integration
+
+The frontend communicates with a REST API backend:
+- **Base URL**: `https://workouts-api.mounis.net`
+- **Authentication**: Bearer token in Authorization header
+- **Endpoints**:
+  - `POST /tokens/auth` - User authentication
+  - `POST /users` - User registration
+  - `GET /workouts` - Fetch user workouts
+  - `POST /workouts` - Create new workout
+  - `GET /workouts/:id` - Get specific workout
+  - `PUT /workouts/:id` - Update workout
+  - `DELETE /workouts/:id` - Delete workout
+
+## 🚀 Production Build
+
+To build the application for production:
+
+```bash
+pnpm build
+```
+
+The built files will be in the `dist/` directory, ready for deployment to any static hosting service.
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📝 Development Notes
+
+### Type Safety
+The application is fully typed with TypeScript, including:
+- API response types
+- Component prop types
+- Store state types
+- Form data types
+
+### State Management
+Uses Svelte's built-in stores for:
+- Authentication state
+- User data persistence
+- Reactive updates across components
+
+### Performance
+- Vite for fast development and optimized builds
+- Code splitting for optimal bundle sizes
+- Efficient component updates with Svelte's reactivity
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
